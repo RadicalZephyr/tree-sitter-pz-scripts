@@ -28,3 +28,19 @@ module test {
 
 (module (identifier)
   (imports (identifier)))
+
+============
+Multiple Imports
+============
+
+module test {
+ imports
+ {
+  Base, Second
+ }
+}
+
+---
+
+(module (identifier)
+  (imports (identifier) (identifier)))
