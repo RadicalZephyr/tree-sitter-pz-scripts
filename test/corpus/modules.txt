@@ -1,0 +1,19 @@
+======================
+Module Names with No Caps
+======================
+
+module base {}
+
+---
+
+(module (identifier))
+
+======================
+Module Names with Caps
+======================
+
+module Base {}
+
+---
+
+(module (identifier))
