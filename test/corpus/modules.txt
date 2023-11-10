@@ -17,3 +17,14 @@ module Base {}
 ---
 
 (module (identifier))
+
+======================
+Module Names with Spaces Error
+======================
+
+module base in the thing {}
+
+---
+
+(module (identifier)
+  (ERROR (UNEXPECTED 'n')))
