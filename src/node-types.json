@@ -1,6 +1,6 @@
 [
   {
-    "type": "identifier",
+    "type": "comment",
     "named": true,
     "fields": {}
   },
@@ -52,6 +52,25 @@
         },
         {
           "type": "item_attr_value",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "module",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "imports",
           "named": true
         }
       ]
@@ -133,6 +152,10 @@
   {
     "type": "=",
     "named": false
+  },
+  {
+    "type": "identifier",
+    "named": true
   },
   {
     "type": "imports",

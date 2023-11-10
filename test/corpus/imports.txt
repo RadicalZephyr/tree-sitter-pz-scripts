@@ -1,11 +1,15 @@
 ============
 Base Imports
 ============
+
 module test {
  imports
  {
   Base
  }
 }
+
 ---
-(imports (identifier))
+
+(module (identifier)
+  (imports (identifier)))

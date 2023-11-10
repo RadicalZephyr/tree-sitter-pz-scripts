@@ -13,7 +13,20 @@
 module.exports = grammar({
   name: 'pz_scripts',
 
+  extras: $ => [
+      /\s/,
+    $.comment,
+  ],
+
   rules: {
+    module: $ => seq(
+      'module',
+      $.identifier,
+      '{',
+      optional($.imports),
+      '}'
+    ),
+
     identifier: _ => /[a-zA-Z]+/,
 
     number: _ => /[0-9]+(\.[0-9]+)?/,
@@ -22,16 +35,6 @@ module.exports = grammar({
       '/*',
       /[^*]*\*+([^/*][^*]*\*+)*/,
       '/',
-    ),
-
-    source_file: $ => $._module,
-
-    _module: $ => seq(
-      'module',
-      $.identifier,
-      '{',
-      optional($.imports),
-      '}'
     ),
 
     imports: $ => seq(

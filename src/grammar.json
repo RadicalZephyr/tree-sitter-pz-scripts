@@ -1,36 +1,7 @@
 {
   "name": "pz_scripts",
   "rules": {
-    "identifier": {
-      "type": "PATTERN",
-      "value": "[a-zA-Z]+"
-    },
-    "number": {
-      "type": "PATTERN",
-      "value": "[0-9]+(\\.[0-9]+)?"
-    },
-    "comment": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "/*"
-        },
-        {
-          "type": "PATTERN",
-          "value": "[^*]*\\*+([^/*][^*]*\\*+)*"
-        },
-        {
-          "type": "STRING",
-          "value": "/"
-        }
-      ]
-    },
-    "source_file": {
-      "type": "SYMBOL",
-      "name": "_module"
-    },
-    "_module": {
+    "module": {
       "type": "SEQ",
       "members": [
         {
@@ -60,6 +31,31 @@
         {
           "type": "STRING",
           "value": "}"
+        }
+      ]
+    },
+    "identifier": {
+      "type": "PATTERN",
+      "value": "[a-zA-Z]+"
+    },
+    "number": {
+      "type": "PATTERN",
+      "value": "[0-9]+(\\.[0-9]+)?"
+    },
+    "comment": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "/*"
+        },
+        {
+          "type": "PATTERN",
+          "value": "[^*]*\\*+([^/*][^*]*\\*+)*"
+        },
+        {
+          "type": "STRING",
+          "value": "/"
         }
       ]
     },
@@ -244,6 +240,10 @@
     {
       "type": "PATTERN",
       "value": "\\s"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "comment"
     }
   ],
   "conflicts": [],
