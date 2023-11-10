@@ -42,55 +42,6 @@ module.exports = grammar({
       '{',
       repeat($.identifier),
       '}'
-    ),
-
-    item: $ => seq(
-      'item',
-      $.identifier,
-      '{',
-      repeat($.item_attribute),
-      '}'
-    ),
-
-    item_attribute: $ => seq(
-      $.identifier,
-      '=',
-      $.item_attr_value,
-      ','
-    ),
-
-    item_attr_value: $ => choice(
-      $.number,
-      $.identifier
-    ),
-
-    recipe: $ => seq(
-      'recipe',
-      $.recipe_name,
-      '{',
-      repeat1($.recipe_requirement),
-      repeat1($.recipe_attribute),
-      '}'
-    ),
-
-    recipe_name: $ => /[a-zA-Z ]+/,
-
-    recipe_requirement: $ => seq(
-      $.identifier,
-      '=',
-      $.number
-    ),
-
-    recipe_attribute: $ => seq(
-      $.identifier,
-      ':',
-      $.recipe_attr_value,
-      ','
-    ),
-
-    recipe_attr_value: $ => choice(
-      $.number,
-      $.identifier,
-    ),
+    )
   }
 });

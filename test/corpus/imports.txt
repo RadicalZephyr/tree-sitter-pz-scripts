@@ -1,5 +1,20 @@
 ============
-Base Imports
+No Imports
+============
+
+module test {
+ imports
+ {
+ }
+}
+
+---
+
+(module (identifier)
+  (imports))
+
+============
+One Import
 ============
 
 module test {
