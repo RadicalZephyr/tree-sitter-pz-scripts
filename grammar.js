@@ -6,6 +6,12 @@ module.exports = grammar({
 
     number: _ => /[0-9]+(\.[0-9]+)?/,
 
+    comment: _ => seq(
+      '/*',
+      /[^*]*\*+([^/*][^*]*\*+)*/,
+      '/',
+    ),
+
     source_file: $ => $._module,
 
     _module: $ => seq(
