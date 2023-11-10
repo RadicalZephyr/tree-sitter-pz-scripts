@@ -18,7 +18,7 @@ module.exports = grammar({
       'module',
       $.identifier,
       '{',
-      opt($.imports),
+      optional($.imports),
       '}'
     ),
 
@@ -59,6 +59,12 @@ module.exports = grammar({
     ),
 
     recipe_name: $ => /[a-zA-Z ]+/,
+
+    recipe_requirement: $ => seq(
+      $.identifier,
+      '=',
+      $.number
+    ),
 
     recipe_attribute: $ => seq(
       $.identifier,
