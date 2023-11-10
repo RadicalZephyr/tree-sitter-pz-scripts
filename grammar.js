@@ -2,6 +2,10 @@ module.exports = grammar({
   name: 'pz_scripts',
 
   rules: {
+    identifier: _ => /[a-zA-Z]+/,
+
+    number: _ => /[0-9]+(\.[0-9]+)?/,
+
     source_file: $ => $._module,
 
     _module: $ => seq(
@@ -18,10 +22,6 @@ module.exports = grammar({
       repeat($.identifier),
       '}'
     ),
-
-    identifier: $ => /\w+/,
-
-    number: $ => /\d+/,
 
     item: $ => seq(
       'item',
@@ -51,6 +51,8 @@ module.exports = grammar({
       repeat1($.recipe_attribute),
       '}'
     ),
+
+    recipe_name: $ => /[a-zA-Z ]+/,
 
     recipe_attribute: $ => seq(
       $.identifier,
