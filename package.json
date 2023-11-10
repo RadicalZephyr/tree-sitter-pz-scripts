@@ -22,5 +22,8 @@
   "homepage": "https://github.com/RadicalZephyr/tree-sitter-pz-scripts#readme",
   "devDependencies": {
     "tree-sitter-cli": "^0.20.8"
+  },
+  "dependencies": {
+    "nan": "^2.18.0"
   }
 }
