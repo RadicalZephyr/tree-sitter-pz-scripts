@@ -1,4 +1,15 @@
 ============
+No Imports Section
+============
+
+module test {
+}
+
+---
+
+(module (identifier))
+
+============
 No Imports
 ============
 
