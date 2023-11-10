@@ -1,0 +1,26 @@
+{
+  "name": "tree-sitter-pz",
+  "version": "0.1.0",
+  "description": "Tree sitter grammar for project zomboid script files",
+  "main": "bindings/node",
+  "scripts": {
+    "test": "tree-sitter test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RadicalZephyr/tree-sitter-pz-scripts.git"
+  },
+  "keywords": [
+    "tree-sitter",
+    "project-zomboid"
+  ],
+  "author": "Zefira Shannon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RadicalZephyr/tree-sitter-pz-scripts/issues"
+  },
+  "homepage": "https://github.com/RadicalZephyr/tree-sitter-pz-scripts#readme",
+  "devDependencies": {
+    "tree-sitter-cli": "^0.20.8"
+  }
+}
