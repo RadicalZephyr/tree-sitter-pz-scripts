@@ -1,0 +1,11 @@
+============
+Base Imports
+============
+module test {
+ imports
+ {
+  Base
+ }
+}
+---
+(imports (identifier))
