@@ -53,7 +53,7 @@ module.exports = grammar({
       'item',
       field('name', $.identifier),
       '{',
-      optional($.item_attribute),
+      repeat1($.item_attribute),
       '}'
     ),
 

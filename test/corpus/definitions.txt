@@ -15,3 +15,25 @@ module Item {
     (item_attribute
       (identifier)
       (item_attribute_value))))
+
+===
+Item Multiple Attributes
+===
+
+module Item {
+  item Pepper {
+    Type        = Normal,
+    DisplayName = Camping,
+  }
+}
+
+---
+
+(module (identifier)
+  (item (identifier)
+    (item_attribute
+      (identifier)
+      (item_attribute_value))
+    (item_attribute
+      (identifier)
+      (item_attribute_value))))
