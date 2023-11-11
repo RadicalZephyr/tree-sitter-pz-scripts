@@ -52,6 +52,11 @@ module.exports = grammar({
       $.recipe,
     ),
 
+
+    ////////////////////////////////////////
+    // Item
+    ////////////////////////////////////////
+
     item: $ => seq(
       'item',
       field('name', $.identifier),
@@ -69,6 +74,11 @@ module.exports = grammar({
 
     // TODO: handle item attr values containing spaces
     item_attribute_value: _ => /\w+/,
+
+
+    ////////////////////////////////////////
+    // Recipe
+    ////////////////////////////////////////
 
     recipe: $ => seq(
       'recipe',
