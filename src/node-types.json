@@ -90,9 +90,117 @@
         {
           "type": "item",
           "named": true
+        },
+        {
+          "type": "recipe",
+          "named": true
         }
       ]
     }
+  },
+  {
+    "type": "recipe",
+    "named": true,
+    "fields": {
+      "attributes": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "recipe_attributes",
+            "named": true
+          }
+        ]
+      },
+      "label": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "name",
+            "named": true
+          }
+        ]
+      },
+      "requirements": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "recipe_requirements",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "recipe_attribute",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "recipe_attributes",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "recipe_attribute",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "recipe_direct_req",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "recipe_requirements",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "recipe_direct_req",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "\n\n",
+    "named": false
   },
   {
     "type": ",",
@@ -104,6 +212,10 @@
   },
   {
     "type": "/*",
+    "named": false
+  },
+  {
+    "type": ":",
     "named": false
   },
   {
@@ -128,6 +240,18 @@
   },
   {
     "type": "module",
+    "named": false
+  },
+  {
+    "type": "name",
+    "named": true
+  },
+  {
+    "type": "number",
+    "named": true
+  },
+  {
+    "type": "recipe",
     "named": false
   },
   {

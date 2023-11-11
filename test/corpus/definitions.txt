@@ -37,3 +37,26 @@ module Item {
     (item_attribute
       (identifier)
       (item_attribute_value))))
+
+============
+Basic Recipe
+============
+
+module Umbrella {
+  recipe Close Umbrella
+  {
+    UmbrellaWhite,
+
+    Result:ClosedUmbrellaWhite,
+    Time:10.0,
+  }
+}
+
+---
+
+(module (identifier)
+  (recipe (name)
+    (recipe_requirements (recipe_direct_req (identifier)))
+    (recipe_attributes
+      (recipe_attribute (identifier) (identifier))
+      (recipe_attribute (identifier) (number)))))

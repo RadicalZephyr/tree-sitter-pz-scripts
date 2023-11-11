@@ -30,6 +30,8 @@ module.exports = grammar({
 
     identifier: _ => /[a-zA-Z]+/,
 
+    name: _ => token.immediate(/[a-zA-Z0-9 ]+/),
+
     number: _ => /[0-9]+(\.[0-9]+)?/,
 
     comment: _ => seq(
@@ -46,7 +48,8 @@ module.exports = grammar({
     ),
 
     _definition: $ => choice(
-      $.item
+      $.item,
+      $.recipe,
     ),
 
     item: $ => seq(
@@ -65,7 +68,43 @@ module.exports = grammar({
     ),
 
     // TODO: handle item attr values containing spaces
-    item_attribute_value: _ => /\w+/
+    item_attribute_value: _ => /\w+/,
+
+    recipe: $ => seq(
+      'recipe',
+      field('label', $.name),
+      '{',
+      field('requirements', $.recipe_requirements),
+      field('attributes', $.recipe_attributes),
+      '}'
+    ),
+
+    recipe_requirements: $ => seq(
+      repeat1($._recipe_requirement),
+      token.immediate('\n\n')
+    ),
+
+    _recipe_requirement: $ => choice(
+      // TODO: handle other forms of requirements
+      $.recipe_direct_req
+    ),
+
+    recipe_direct_req: $ => seq($.identifier, ','),
+
+    recipe_attributes: $ => repeat1($.recipe_attribute),
+
+    recipe_attribute: $ => seq(
+      $.identifier,
+      ':',
+      $._recipe_attribute_value,
+      ','
+    ),
+
+    // TODO: handle other types of attribute values
+    _recipe_attribute_value: $ => choice(
+      $.number,
+      $.identifier,
+    )
   }
 });
 
