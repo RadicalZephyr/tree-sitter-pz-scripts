@@ -99,7 +99,7 @@ module.exports = grammar({
     _recipe_requirement: $ => choice(
       // TODO: handle other forms of requirements
       $.recipe_requirement_choice,
-      $.recipe_direct_req
+      $.recipe_requirement_simple
     ),
 
     recipe_requirement_choice: $ => seq(
@@ -110,7 +110,7 @@ module.exports = grammar({
       ','
     ),
 
-    recipe_direct_req: $ => seq($.identifier, ','),
+    recipe_requirement_simple: $ => seq($.identifier, ','),
 
     recipe_attributes: $ => repeat1($.recipe_attribute),
 

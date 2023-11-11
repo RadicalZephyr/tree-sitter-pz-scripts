@@ -169,11 +169,11 @@
     }
   },
   {
-    "type": "recipe_direct_req",
+    "type": "recipe_requirement_choice",
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
@@ -184,11 +184,11 @@
     }
   },
   {
-    "type": "recipe_requirement_choice",
+    "type": "recipe_requirement_simple",
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
@@ -207,11 +207,11 @@
       "required": true,
       "types": [
         {
-          "type": "recipe_direct_req",
+          "type": "recipe_requirement_choice",
           "named": true
         },
         {
-          "type": "recipe_requirement_choice",
+          "type": "recipe_requirement_simple",
           "named": true
         }
       ]

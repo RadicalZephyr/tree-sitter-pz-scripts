@@ -296,7 +296,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "recipe_direct_req"
+          "name": "recipe_requirement_simple"
         }
       ]
     },
@@ -337,7 +337,7 @@
         }
       ]
     },
-    "recipe_direct_req": {
+    "recipe_requirement_simple": {
       "type": "SEQ",
       "members": [
         {

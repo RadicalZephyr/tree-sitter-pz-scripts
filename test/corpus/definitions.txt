@@ -56,7 +56,7 @@ module Umbrella {
 
 (module (identifier)
   (recipe (name)
-    (recipe_requirements (recipe_direct_req (identifier)))
+    (recipe_requirements (recipe_requirement_simple (identifier)))
     (recipe_attributes
       (recipe_attribute (identifier) (identifier))
       (recipe_attribute (identifier) (number)))))
