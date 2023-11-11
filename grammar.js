@@ -24,6 +24,7 @@ module.exports = grammar({
       $.identifier,
       '{',
       optional($.imports),
+      optional($._definition),
       '}'
     ),
 
@@ -42,7 +43,29 @@ module.exports = grammar({
       '{',
       commaSep($.identifier),
       '}'
-    )
+    ),
+
+    _definition: $ => choice(
+      $.item
+    ),
+
+    item: $ => seq(
+      'item',
+      field('name', $.identifier),
+      '{',
+      optional($.item_attribute),
+      '}'
+    ),
+
+    item_attribute: $ => seq(
+      field('key', $.identifier),
+      '=',
+      field('value', $.item_attribute_value),
+        ','
+    ),
+
+    // TODO: handle item attr values containing spaces
+    item_attribute_value: _ => /\w+/
   }
 });
 

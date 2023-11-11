@@ -1,0 +1,17 @@
+===
+Item
+===
+
+module Item {
+  item Pepper {
+    DisplayName = Camping,
+  }
+}
+
+---
+
+(module (identifier)
+  (item (identifier)
+    (item_attribute
+      (identifier)
+      (item_attribute_value))))
