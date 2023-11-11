@@ -51,10 +51,31 @@
       "value": "[a-zA-Z][a-zA-Z0-9]*"
     },
     "name": {
-      "type": "IMMEDIATE_TOKEN",
+      "type": "TOKEN",
       "content": {
-        "type": "PATTERN",
-        "value": "[a-zA-Z0-9 ]+"
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "PATTERN",
+            "value": "[a-zA-Z][a-zA-Z0-9]*"
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": " "
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "[a-zA-Z][a-zA-Z0-9]*"
+                }
+              ]
+            }
+          }
+        ]
       }
     },
     "number": {

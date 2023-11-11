@@ -32,7 +32,7 @@ module.exports = grammar({
 
     // TODO: make sure that name parsing captures names correctly
     // without leading or trailing spaces
-    name: _ => token.immediate(/[a-zA-Z0-9 ]+/),
+    name: _ => token(separated_list1(' ', /[a-zA-Z][a-zA-Z0-9]*/)),
 
     number: _ => /[0-9]+(\.[0-9]+)?/,
 
