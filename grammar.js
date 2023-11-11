@@ -43,7 +43,7 @@ module.exports = grammar({
     imports: $ => seq(
       'imports',
       '{',
-      commaSep($.identifier),
+      separated_list(',', $.identifier),
       '}'
     ),
 
@@ -119,25 +119,29 @@ module.exports = grammar({
 });
 
 /**
- * Creates a rule to match one or more of the rules separated by a comma
+ * Creates a rule to match one or more of the rules separated by a
+ * separator.
  *
+ * @param {RuleOrLiteral} sep
  * @param {RuleOrLiteral} rule
  *
  * @return {SeqRule}
  *
  */
-function commaSep1(rule) {
-  return seq(rule, repeat(seq(',', rule)));
+function separated_list1(sep, rule) {
+  return seq(rule, repeat(seq(sep, rule)));
 }
 
 /**
- * Creates a rule to optionally match one or more of the rules separated by a comma
+ * Creates a rule to optionally match one or more of the rules
+ * separated by a separator
  *
+ * @param {RuleOrLiteral} sep
  * @param {RuleOrLiteral} rule
  *
  * @return {ChoiceRule}
  *
  */
-function commaSep(rule) {
-  return optional(commaSep1(rule));
+function separated_list(sep, rule) {
+  return optional(separated_list1(sep, rule));
 }
