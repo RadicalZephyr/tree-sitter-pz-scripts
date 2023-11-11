@@ -60,3 +60,32 @@ module Umbrella {
     (recipe_attributes
       (recipe_attribute (identifier) (identifier))
       (recipe_attribute (identifier) (number)))))
+
+=======
+Recipe With Alt Ingredients
+=======
+
+module Rec
+{
+  recipe Smash Bottle
+  {
+    WineEmpty/WineEmpty2,
+
+    Result:SmashedBottle,
+    Time:20,
+    Sound:BreakGlassItem,
+  }
+}
+
+---
+
+(module (identifier)
+  (recipe (name)
+    (recipe_requirements
+      (recipe_requirement_choice
+        (identifier)
+        (identifier)))
+    (recipe_attributes
+      (recipe_attribute (identifier) (identifier))
+      (recipe_attribute (identifier) (number))
+      (recipe_attribute (identifier) (identifier)))))

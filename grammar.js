@@ -28,8 +28,10 @@ module.exports = grammar({
       '}'
     ),
 
-    identifier: _ => /[a-zA-Z]+/,
+    identifier: _ => /[a-zA-Z][a-zA-Z0-9]*/,
 
+    // TODO: make sure that name parsing captures names correctly
+    // without leading or trailing spaces
     name: _ => token.immediate(/[a-zA-Z0-9 ]+/),
 
     number: _ => /[0-9]+(\.[0-9]+)?/,
@@ -96,7 +98,16 @@ module.exports = grammar({
 
     _recipe_requirement: $ => choice(
       // TODO: handle other forms of requirements
+      $.recipe_requirement_choice,
       $.recipe_direct_req
+    ),
+
+    recipe_requirement_choice: $ => seq(
+      separated_list2(
+        token.immediate('/'),
+        $.identifier
+      ),
+      ','
     ),
 
     recipe_direct_req: $ => seq($.identifier, ','),
@@ -117,6 +128,20 @@ module.exports = grammar({
     )
   }
 });
+
+/**
+ * Creates a rule to match two or more of the rules separated by a
+ * separator.
+ *
+ * @param {RuleOrLiteral} sep
+ * @param {RuleOrLiteral} rule
+ *
+ * @return {SeqRule}
+ *
+ */
+function separated_list2(sep, rule) {
+  return seq(rule, repeat1(seq(sep, rule)));
+}
 
 /**
  * Creates a rule to match one or more of the rules separated by a

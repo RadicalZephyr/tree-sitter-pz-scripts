@@ -184,6 +184,21 @@
     }
   },
   {
+    "type": "recipe_requirement_choice",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "recipe_requirements",
     "named": true,
     "fields": {},
@@ -193,6 +208,10 @@
       "types": [
         {
           "type": "recipe_direct_req",
+          "named": true
+        },
+        {
+          "type": "recipe_requirement_choice",
           "named": true
         }
       ]
