@@ -35,16 +35,23 @@ plain (non-CONNECT) request, which the Claude Code web sandbox proxy rejects
 with `405`. Work around it rather than skipping the tests:
 
 ```sh
-npm install --ignore-scripts
+npm ci --ignore-scripts
 curl -sSL -o /tmp/ts.gz https://github.com/tree-sitter/tree-sitter/releases/download/v0.20.8/tree-sitter-linux-x64.gz
 gunzip -c /tmp/ts.gz > node_modules/tree-sitter-cli/tree-sitter
 chmod +x node_modules/tree-sitter-cli/tree-sitter
 ```
 
-Match the version to the `tree-sitter-cli` range in `package.json` (currently
-`^0.20.8`) so the generated parser stays byte-identical to what's committed.
+The version in that URL must match the `tree-sitter-cli` pin, or the parser you
+generate won't be byte-identical to what's committed and the CI drift check will
+fail. `package.json` pins it exactly (`0.20.8`) and `package-lock.json` is
+committed, so both agree — if you bump one, bump the URL too.
 
 ## Architecture
+
+`package-lock.json` is committed and `tree-sitter-cli` is pinned to an exact
+version, because `src/` below is a generated artifact kept under version
+control — the generator's version is effectively a build input. Use `npm ci`,
+not `npm install`.
 
 `grammar.js` is the only hand-written grammar source. Everything in `src/` —
 `parser.c`, `grammar.json`, `node-types.json` — is generated output that is

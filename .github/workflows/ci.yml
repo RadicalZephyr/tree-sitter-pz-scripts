@@ -27,10 +27,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: npm
 
-      # No lockfile is committed, so there is nothing for setup-node to cache.
-      # `tree-sitter-cli` pulls its binary from a GitHub release on postinstall.
-      - run: npm install
+      # `npm ci` installs exactly what package-lock.json pins. The drift check
+      # below compares a generated artifact against a committed one, so the
+      # generator's version has to be fixed for the comparison to mean anything.
+      - run: npm ci
 
       - name: Corpus tests
         run: npm test
@@ -64,6 +66,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: npm
 
       # Rust ships in the runner images, but pinning the channel here means the
       # job doesn't quietly change behaviour when an image is rebuilt.
@@ -72,7 +75,7 @@ jobs:
       # binding.gyp makes npm build the native addon as part of install, so
       # this compiles the generated parser.c on each platform.
       - name: Build Node binding
-        run: npm install
+        run: npm ci
 
       - name: Load Node binding
         run: node -e "require('./bindings/node')"
