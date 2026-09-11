@@ -37,9 +37,10 @@ jobs:
       - name: Corpus tests
         run: npm test
 
-      # `tree-sitter test` regenerates src/ as a side effect, so a dirty tree
-      # here means the committed parser had drifted from grammar.js. The
-      # explicit generate keeps the check honest if that ever stops being true.
+      # This generate is load-bearing. Up to 0.20 `tree-sitter test` regenerated
+      # src/ as a side effect; as of 0.27 it does not, so `npm test` above runs
+      # against the COMMITTED parser and would happily pass on a grammar.js edit
+      # that was never regenerated. This step is what catches that.
       - name: Check src/ is in sync with grammar.js
         run: |
           npx tree-sitter generate
@@ -59,11 +60,12 @@ jobs:
       # One platform failing shouldn't hide whether the others are fine.
       fail-fast: false
       matrix:
-        # windows-2022 rather than windows-latest: the latter now ships Visual
-        # Studio 2026, and the node-gyp npm bundles cannot detect it
-        # (nodejs/node-gyp#3282), so the native addon fails to configure.
-        # Revisit when npm ships a node-gyp >= 12, or when this repo moves off
-        # nan to node-addon-api.
+        # windows-2022 rather than windows-latest. Tested on this branch: moving
+        # to node-addon-api did NOT clear the Visual Studio 2026 detection
+        # failure, because node-addon-api still builds through node-gyp, and the
+        # node-gyp npm bundles (11.5.0) cannot detect VS 18
+        # (nodejs/node-gyp#3282). Un-pinning needs a newer node-gyp or prebuilt
+        # binaries, not a different binding library.
         os: [ubuntu-latest, macos-latest, windows-2022]
     steps:
       - uses: actions/checkout@v4
@@ -90,5 +92,13 @@ jobs:
       - name: Build Node binding
         run: npm ci
 
+      # The package is ESM now, so this is an import rather than a require, and
+      # it asserts the language export exists rather than just that the module
+      # resolves.
       - name: Load Node binding
-        run: node -e "require('./bindings/node')"
+        run: |
+          node --input-type=module -e "
+            import binding from './bindings/node/index.js';
+            if (!binding.language) throw new Error('binding exposes no language export');
+            console.log('loaded, node types:', binding.nodeTypeInfo.length);
+          "
