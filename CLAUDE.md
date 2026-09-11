@@ -51,7 +51,9 @@ Match the version to the `tree-sitter-cli` range in `package.json` (currently
 **also committed**, so consumers can build without the CLI. Treat them as a
 unit: any change to `grammar.js` must be followed by `tree-sitter generate` and
 both committed together. `git status` after a bare `generate` should be clean;
-if it isn't, the committed parser had drifted.
+if it isn't, the committed parser had drifted. CI enforces this — the Grammar
+job regenerates and fails if anything under `src/` changes, so a grammar edit
+pushed without its regenerated parser will go red.
 
 `bindings/node`, `bindings/rust`, and `binding.gyp` are unmodified
 `tree-sitter init` boilerplate; `Cargo.toml` is too apart from its `license` and

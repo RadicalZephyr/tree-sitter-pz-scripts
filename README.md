@@ -1,5 +1,7 @@
 # tree-sitter-pz-scripts
 
+[![CI](https://github.com/RadicalZephyr/tree-sitter-pz-scripts/actions/workflows/ci.yml/badge.svg)](https://github.com/RadicalZephyr/tree-sitter-pz-scripts/actions/workflows/ci.yml)
+
 A [tree-sitter](https://tree-sitter.github.io/tree-sitter/) grammar for Project
 Zomboid script files — the `.txt` files under `media/scripts/` that define
 items, recipes, and the rest of the game's data.

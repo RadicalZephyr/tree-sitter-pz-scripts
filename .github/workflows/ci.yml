@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  grammar:
+    name: Grammar
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # No lockfile is committed, so there is nothing for setup-node to cache.
+      # `tree-sitter-cli` pulls its binary from a GitHub release on postinstall.
+      - run: npm install
+
+      - name: Corpus tests
+        run: npm test
+
+      # `tree-sitter test` regenerates src/ as a side effect, so a dirty tree
+      # here means the committed parser had drifted from grammar.js. The
+      # explicit generate keeps the check honest if that ever stops being true.
+      - name: Check src/ is in sync with grammar.js
+        run: |
+          npx tree-sitter generate
+          # Scoped to src/ deliberately: an unrelated stray file in the tree
+          # must not fail this step with a message blaming the parser.
+          if [ -n "$(git status --porcelain -- src/)" ]; then
+            echo "::error::src/ is out of date with grammar.js. Run 'npx tree-sitter generate' and commit the result."
+            git status --porcelain -- src/
+            git --no-pager diff -- src/
+            exit 1
+          fi
+
+  bindings:
+    name: Bindings (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # One platform failing shouldn't hide whether the others are fine.
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Rust ships in the runner images, but pinning the channel here means the
+      # job doesn't quietly change behaviour when an image is rebuilt.
+      - uses: dtolnay/rust-toolchain@stable
+
+      # binding.gyp makes npm build the native addon as part of install, so
+      # this compiles the generated parser.c on each platform.
+      - name: Build Node binding
+        run: npm install
+
+      - name: Load Node binding
+        run: node -e "require('./bindings/node')"
+
+      - name: Rust binding
+        run: cargo test
