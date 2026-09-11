@@ -19,11 +19,14 @@ npx tree-sitter generate            # regenerate src/ from grammar.js
 npx tree-sitter parse <file>        # dump a parse tree; exits nonzero if it contains ERROR
 cargo test --locked                 # Rust binding loads + doctest
 npx node-gyp rebuild                # build the Node native binding into build/Release
+npx tree-sitter build                # compile the parser without node-gyp
+npx tree-sitter fuzz                 # fuzz the grammar for crashes
 ```
 
-`tree-sitter generate` runs implicitly as part of `tree-sitter test`, so a
-grammar edit is picked up by the test run — but the regenerated `src/` must
-still be committed (see below).
+`tree-sitter test` does **not** regenerate `src/` (it did up to 0.20; it no
+longer does). It runs against the committed parser, so after editing
+`grammar.js` you must run `tree-sitter generate` yourself — otherwise the tests
+pass against a stale parser. CI enforces this; see Architecture below.
 
 Use `-u` with care: it makes any test pass by definition. Read the diff before
 committing it.
@@ -36,7 +39,7 @@ with `405`. Work around it rather than skipping the tests:
 
 ```sh
 npm ci --ignore-scripts
-curl -sSL -o /tmp/ts.gz https://github.com/tree-sitter/tree-sitter/releases/download/v0.20.8/tree-sitter-linux-x64.gz
+curl -sSL -o /tmp/ts.gz https://github.com/tree-sitter/tree-sitter/releases/download/v0.27.0/tree-sitter-linux-x64.gz
 gunzip -c /tmp/ts.gz > node_modules/tree-sitter-cli/tree-sitter
 chmod +x node_modules/tree-sitter-cli/tree-sitter
 ```
@@ -54,6 +57,14 @@ that produced it is effectively a build input. The ranges in `package.json` and
 `Cargo.toml` stay loose, matching the upstream tree-sitter grammars; the
 lockfiles supply the determinism. Install with `npm ci` and build with
 `cargo --locked`, both of which fail rather than quietly moving a lockfile.
+
+`tree-sitter.json` is the metadata source of truth as of ABI 15 — grammar name,
+scope, version, license, and which bindings exist. It duplicates some fields
+from `package.json` and `Cargo.toml`; keep them consistent.
+
+`grammar.js` is ESM (`export default grammar({...})`) and `package.json` sets
+`"type": "module"`, so the whole package is ESM. A CJS `require()` of the Node
+binding will fail — import it instead.
 
 `grammar.js` is the only hand-written grammar source. Everything in `src/` —
 `parser.c`, `grammar.json`, `node-types.json` — is generated output that is

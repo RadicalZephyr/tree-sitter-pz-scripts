@@ -58,9 +58,12 @@ separator is currently required; without it the recipe won't parse.
 Requires Node. The `tree-sitter` CLI comes in as a dev dependency:
 
 ```sh
-npm install
+npm ci
 npm test
 ```
+
+The package is ESM, and the parser targets tree-sitter ABI 15, which needs a
+tree-sitter runtime of 0.25 or newer.
 
 To run a single test, match it by its name in the corpus:
 
@@ -70,7 +73,8 @@ npx tree-sitter test -f "Basic Recipe"
 
 After editing `grammar.js`, regenerate the parser and commit the result
 alongside your change — `src/` is generated but checked in so that consumers
-don't need the CLI:
+don't need the CLI. `npm test` does not do this for you; it runs against the
+committed parser, so skipping this means testing a stale one:
 
 ```sh
 npx tree-sitter generate
@@ -92,11 +96,12 @@ extend the grammar.
 
 ### Bindings
 
-Node and Rust bindings are generated boilerplate and both build:
+Node and Rust bindings both build. The Node binding uses `node-addon-api`, and
+the Rust one exposes the grammar as a `LANGUAGE` constant:
 
 ```sh
 npx node-gyp rebuild   # Node native binding
-cargo test             # Rust binding
+cargo test --locked    # Rust binding
 ```
 
 ## License
