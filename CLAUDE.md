@@ -90,7 +90,7 @@ have commented-out blocks ready for that.
 ## Grammar shape
 
 ```
-module ::= 'module' identifier '{' imports? definition? '}'
+module ::= 'module' identifier '{' imports? definition* '}'
 definition ::= item | recipe
 ```
 
@@ -108,15 +108,12 @@ These are all verified against the current parser, and most correspond to a
   and ignored, but omitting the blank line between requirements and attributes
   turns the whole `recipe` into an `ERROR` — the attributes get mis-lexed as
   further requirements. This is the one place layout is significant.
-- **A module holds at most one definition.** `module` uses
-  `optional($._definition)`, so a second `item` or `recipe` in the same module
-  parses as an `ERROR`. Real PZ modules contain many; this is the most likely
-  next thing to fix.
 - **`identifier` is `/[a-zA-Z][a-zA-Z0-9]*/`** — no dots or underscores. Real
   script files are full of dotted names like `Base.WineEmpty`, which currently
   fail to parse.
-- **`item_attribute_value` is `/\w+/`** — a value with spaces
-  (`DisplayName = Black Pepper,`) fails.
+- **`item_attribute_value` is `/\w+/`** — anything that isn't one bare word
+  fails, which covers both spaces (`DisplayName = Black Pepper,`) and decimals
+  (`MaxRange = 1.5,`). The decimal case is the one that bites on real files.
 - **`name` is wrapped in `token(...)`** so a multi-word recipe label like
   `Close Umbrella` lexes as one token rather than colliding with `extras`
   whitespace. Leading/trailing space handling is a known TODO.

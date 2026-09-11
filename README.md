@@ -31,7 +31,8 @@ module Umbrella {
 }
 ```
 
-- `module` blocks with an optional `imports` list
+- `module` blocks with an optional `imports` list, holding any number of
+  definitions
 - `item` definitions with `key = value,` attributes
 - `recipe` definitions with multi-word labels, ingredient requirements, and
   `key:value,` attributes
@@ -43,11 +44,11 @@ separator is currently required; without it the recipe won't parse.
 
 ## Not supported yet
 
-- **More than one definition per module.** A second `item` or `recipe` inside
-  the same `module` is a parse error today. This is the biggest gap.
 - **Dotted identifiers** like `Base.WineEmpty`, which real script files use
-  everywhere.
-- **Attribute values containing spaces**, e.g. `DisplayName = Black Pepper,`.
+  everywhere. This is now the biggest gap.
+- **Item attribute values that aren't a single bare word.** `item_attribute_value`
+  is `/\w+/`, so both `DisplayName = Black Pepper,` and `MaxRange = 1.5,` fail.
+  Decimals are common enough in real items to make this a blocker in practice.
 - Requirement forms beyond the simple and slash-alternate cases, and attribute
   value types beyond numbers and bare identifiers.
 - Syntax highlighting, indentation, and tagging queries — there is no
