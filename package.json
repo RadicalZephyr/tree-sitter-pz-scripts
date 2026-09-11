@@ -6,6 +6,7 @@
   "scripts": {
     "test": "tree-sitter test"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/RadicalZephyr/tree-sitter-pz-scripts.git"
@@ -21,9 +22,18 @@
   },
   "homepage": "https://github.com/RadicalZephyr/tree-sitter-pz-scripts#readme",
   "devDependencies": {
-    "tree-sitter-cli": "^0.20.8"
+    "tree-sitter-cli": "^0.27.0"
   },
   "dependencies": {
-    "nan": "^2.18.0"
+    "node-addon-api": "^8.5.0",
+    "node-gyp-build": "^4.8.4"
+  },
+  "peerDependencies": {
+    "tree-sitter": "^0.25.0"
+  },
+  "peerDependenciesMeta": {
+    "tree-sitter": {
+      "optional": true
+    }
   }
 }
