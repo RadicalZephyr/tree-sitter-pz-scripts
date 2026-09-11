@@ -24,7 +24,7 @@ export default grammar({
       $.identifier,
       '{',
       optional($.imports),
-      optional($._definition),
+      repeat($._definition),
       '}'
     ),
 

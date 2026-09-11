@@ -89,3 +89,145 @@ module Rec
       (recipe_attribute (identifier) (identifier))
       (recipe_attribute (identifier) (number))
       (recipe_attribute (identifier) (identifier)))))
+
+=======================
+Multiple Items
+=======================
+
+module Food {
+  item Pepper {
+    Type = Normal,
+  }
+  item Salt {
+    Type = Normal,
+  }
+}
+
+---
+
+(module (identifier)
+  (item (identifier)
+    (item_attribute (identifier) (item_attribute_value)))
+  (item (identifier)
+    (item_attribute (identifier) (item_attribute_value))))
+
+=======================
+Multiple Recipes
+=======================
+
+module Rec
+{
+  recipe Close Umbrella
+  {
+    UmbrellaWhite,
+
+    Result:ClosedUmbrellaWhite,
+    Time:10.0,
+  }
+
+  recipe Smash Bottle
+  {
+    WineEmpty,
+
+    Result:SmashedBottle,
+    Time:20,
+  }
+}
+
+---
+
+(module (identifier)
+  (recipe (name)
+    (recipe_requirements (recipe_requirement_simple (identifier)))
+    (recipe_attributes
+      (recipe_attribute (identifier) (identifier))
+      (recipe_attribute (identifier) (number))))
+  (recipe (name)
+    (recipe_requirements (recipe_requirement_simple (identifier)))
+    (recipe_attributes
+      (recipe_attribute (identifier) (identifier))
+      (recipe_attribute (identifier) (number)))))
+
+=======================
+Mixed Item And Recipe
+=======================
+
+module Mixed {
+  item Pepper {
+    Type = Normal,
+  }
+
+  recipe Close Umbrella
+  {
+    UmbrellaWhite,
+
+    Result:ClosedUmbrellaWhite,
+    Time:10.0,
+  }
+}
+
+---
+
+(module (identifier)
+  (item (identifier)
+    (item_attribute (identifier) (item_attribute_value)))
+  (recipe (name)
+    (recipe_requirements (recipe_requirement_simple (identifier)))
+    (recipe_attributes
+      (recipe_attribute (identifier) (identifier))
+      (recipe_attribute (identifier) (number)))))
+
+=======================
+Imports With Multiple Definitions
+=======================
+
+module Food {
+  imports {
+    Base
+  }
+
+  item Pepper {
+    Type = Normal,
+  }
+  item Salt {
+    Type = Normal,
+  }
+}
+
+---
+
+(module (identifier)
+  (imports (identifier))
+  (item (identifier)
+    (item_attribute (identifier) (item_attribute_value)))
+  (item (identifier)
+    (item_attribute (identifier) (item_attribute_value))))
+
+=======================
+Recipe Before Item
+=======================
+
+module Mixed {
+  recipe Close Umbrella
+  {
+    UmbrellaWhite,
+
+    Result:ClosedUmbrellaWhite,
+    Time:10.0,
+  }
+
+  item Pepper {
+    Type = Normal,
+  }
+}
+
+---
+
+(module (identifier)
+  (recipe (name)
+    (recipe_requirements (recipe_requirement_simple (identifier)))
+    (recipe_attributes
+      (recipe_attribute (identifier) (identifier))
+      (recipe_attribute (identifier) (number))))
+  (item (identifier)
+    (item_attribute (identifier) (item_attribute_value))))
