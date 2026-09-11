@@ -80,5 +80,7 @@ jobs:
       - name: Load Node binding
         run: node -e "require('./bindings/node')"
 
+      # --locked is the cargo counterpart of `npm ci`: it fails rather than
+      # silently updating Cargo.lock, so CI builds what the lockfile pins.
       - name: Rust binding
-        run: cargo test
+        run: cargo test --locked

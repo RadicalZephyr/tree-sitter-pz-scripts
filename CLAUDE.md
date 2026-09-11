@@ -17,7 +17,7 @@ npx tree-sitter test -f "Basic Recipe"   # run one test, matched by its corpus n
 npx tree-sitter test -u             # rewrite corpus expectations from actual output
 npx tree-sitter generate            # regenerate src/ from grammar.js
 npx tree-sitter parse <file>        # dump a parse tree; exits nonzero if it contains ERROR
-cargo test                          # Rust binding loads + doctest
+cargo test --locked                 # Rust binding loads + doctest
 npx node-gyp rebuild                # build the Node native binding into build/Release
 ```
 
@@ -41,17 +41,19 @@ gunzip -c /tmp/ts.gz > node_modules/tree-sitter-cli/tree-sitter
 chmod +x node_modules/tree-sitter-cli/tree-sitter
 ```
 
-The version in that URL must match the `tree-sitter-cli` pin, or the parser you
-generate won't be byte-identical to what's committed and the CI drift check will
-fail. `package.json` pins it exactly (`0.20.8`) and `package-lock.json` is
-committed, so both agree — if you bump one, bump the URL too.
+The version in that URL must match the `tree-sitter-cli` version in
+`package-lock.json`, or the parser you generate won't be byte-identical to
+what's committed and the CI drift check will fail. The lockfile is the source of
+truth here — `package.json` carries only a range.
 
 ## Architecture
 
-`package-lock.json` is committed and `tree-sitter-cli` is pinned to an exact
-version, because `src/` below is a generated artifact kept under version
-control — the generator's version is effectively a build input. Use `npm ci`,
-not `npm install`.
+`package-lock.json` and `Cargo.lock` are both committed, because `src/` below is
+a generated artifact kept under version control — the version of the generator
+that produced it is effectively a build input. The ranges in `package.json` and
+`Cargo.toml` stay loose, matching the upstream tree-sitter grammars; the
+lockfiles supply the determinism. Install with `npm ci` and build with
+`cargo --locked`, both of which fail rather than quietly moving a lockfile.
 
 `grammar.js` is the only hand-written grammar source. Everything in `src/` —
 `parser.c`, `grammar.json`, `node-types.json` — is generated output that is
