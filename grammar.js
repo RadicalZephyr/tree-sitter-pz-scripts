@@ -34,7 +34,15 @@ export default grammar({
     // without leading or trailing spaces
     name: _ => token(separated_list1(' ', /[a-zA-Z][a-zA-Z0-9]*/)),
 
-    number: _ => /[0-9]+(\.[0-9]+)?/,
+    // Deliberately no token(prec(...)) here. Explicit token precedence in
+    // tree-sitter outranks longest-match, so raising these above
+    // item_attribute_text would lex `9mm Magazine` as the number 9 and
+    // `TRUEish` as the boolean TRUE, each followed by an error. Longest-match
+    // already picks item_attribute_text in those cases, and for an exact tie
+    // (`1.5`, `TRUE`) these win because they appear earlier in the grammar.
+    number: _ => /-?[0-9]+(\.[0-9]+)?/,
+
+    boolean: _ => /[Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee]/,
 
     comment: _ => seq(
       '/*',
@@ -70,12 +78,23 @@ export default grammar({
     item_attribute: $ => seq(
       field('key', $.identifier),
       '=',
-      field('value', $.item_attribute_value),
+      field('value', $._item_attribute_value),
         ','
     ),
 
-    // TODO: handle item attr values containing spaces
-    item_attribute_value: _ => /\w+/,
+    _item_attribute_value: $ => choice(
+      $.number,
+      $.boolean,
+      $.item_attribute_text,
+    ),
+
+    // A value runs to the terminating comma. Surveying a real items.txt found
+    // no value containing a comma, and every assignment ending in one, so the
+    // comma is a safe terminator. Values do contain spaces, dots, hyphens,
+    // underscores, semicolons and parentheses, which is why this is not a
+    // character allowlist. The trailing class keeps whitespace before the comma
+    // out of the token.
+    item_attribute_text: _ => /[^,\n]*[^,\n\s]/,
 
 
     ////////////////////////////////////////

@@ -14,7 +14,7 @@ module Item {
   (item (identifier)
     (item_attribute
       (identifier)
-      (item_attribute_value))))
+      (item_attribute_text))))
 
 ===
 Item Multiple Attributes
@@ -33,10 +33,10 @@ module Item {
   (item (identifier)
     (item_attribute
       (identifier)
-      (item_attribute_value))
+      (item_attribute_text))
     (item_attribute
       (identifier)
-      (item_attribute_value))))
+      (item_attribute_text))))
 
 ============
 Basic Recipe
@@ -107,9 +107,9 @@ module Food {
 
 (module (identifier)
   (item (identifier)
-    (item_attribute (identifier) (item_attribute_value)))
+    (item_attribute (identifier) (item_attribute_text)))
   (item (identifier)
-    (item_attribute (identifier) (item_attribute_value))))
+    (item_attribute (identifier) (item_attribute_text))))
 
 =======================
 Multiple Recipes
@@ -170,7 +170,7 @@ module Mixed {
 
 (module (identifier)
   (item (identifier)
-    (item_attribute (identifier) (item_attribute_value)))
+    (item_attribute (identifier) (item_attribute_text)))
   (recipe (name)
     (recipe_requirements (recipe_requirement_simple (identifier)))
     (recipe_attributes
@@ -199,9 +199,9 @@ module Food {
 (module (identifier)
   (imports (identifier))
   (item (identifier)
-    (item_attribute (identifier) (item_attribute_value)))
+    (item_attribute (identifier) (item_attribute_text)))
   (item (identifier)
-    (item_attribute (identifier) (item_attribute_value))))
+    (item_attribute (identifier) (item_attribute_text))))
 
 =======================
 Recipe Before Item
@@ -230,4 +230,4 @@ module Mixed {
       (recipe_attribute (identifier) (identifier))
       (recipe_attribute (identifier) (number))))
   (item (identifier)
-    (item_attribute (identifier) (item_attribute_value))))
+    (item_attribute (identifier) (item_attribute_text))))

@@ -65,7 +65,15 @@
         "required": true,
         "types": [
           {
-            "type": "item_attribute_value",
+            "type": "boolean",
+            "named": true
+          },
+          {
+            "type": "item_attribute_text",
+            "named": true
+          },
+          {
+            "type": "number",
             "named": true
           }
         ]
@@ -244,6 +252,10 @@
     "named": false
   },
   {
+    "type": "boolean",
+    "named": true
+  },
+  {
     "type": "identifier",
     "named": true
   },
@@ -256,7 +268,7 @@
     "named": false
   },
   {
-    "type": "item_attribute_value",
+    "type": "item_attribute_text",
     "named": true
   },
   {

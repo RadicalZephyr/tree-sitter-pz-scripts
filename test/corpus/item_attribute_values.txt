@@ -1,0 +1,171 @@
+=======================
+Decimal Value
+=======================
+
+module M {
+  item A {
+    MaxRange = 1.5,
+  }
+}
+
+---
+
+(module (identifier)
+  (item (identifier)
+    (item_attribute (identifier) (number))))
+
+=======================
+Negative Value
+=======================
+
+module M {
+  item A {
+    HitAngleMod = -30,
+  }
+}
+
+---
+
+(module (identifier)
+  (item (identifier)
+    (item_attribute (identifier) (number))))
+
+=======================
+Boolean Values
+=======================
+
+module M {
+  item A {
+    KnockBackOnNoDeath = TRUE,
+    Alcoholic = FALSE,
+    IsWaterSource = true,
+  }
+}
+
+---
+
+(module (identifier)
+  (item (identifier)
+    (item_attribute (identifier) (boolean))
+    (item_attribute (identifier) (boolean))
+    (item_attribute (identifier) (boolean))))
+
+=======================
+Multi Word Value
+=======================
+
+module M {
+  item A {
+    DisplayName = Baseball Bat,
+  }
+}
+
+---
+
+(module (identifier)
+  (item (identifier)
+    (item_attribute (identifier) (item_attribute_text))))
+
+=======================
+Hyphenated Value
+=======================
+
+module M {
+  item A {
+    ReplaceOnUseOn = WaterSource-WaterBowl,
+  }
+}
+
+---
+
+(module (identifier)
+  (item (identifier)
+    (item_attribute (identifier) (item_attribute_text))))
+
+=======================
+Semicolon List Value
+=======================
+
+module M {
+  item A {
+    Categories = Improvised;Blunt,
+  }
+}
+
+---
+
+(module (identifier)
+  (item (identifier)
+    (item_attribute (identifier) (item_attribute_text))))
+
+=======================
+Value With Parentheses
+=======================
+
+module M {
+  item A {
+    DisplayName = Whiskey Bottle (full),
+  }
+}
+
+---
+
+(module (identifier)
+  (item (identifier)
+    (item_attribute (identifier) (item_attribute_text))))
+
+=======================
+Bare Word Value Is Text Not Boolean
+=======================
+
+module M {
+  item A {
+    Type = Normal,
+    IdleAnim = Idle_Weapon2,
+    TrueGrit = TRUEish,
+  }
+}
+
+---
+
+(module (identifier)
+  (item (identifier)
+    (item_attribute (identifier) (item_attribute_text))
+    (item_attribute (identifier) (item_attribute_text))
+    (item_attribute (identifier) (item_attribute_text))))
+
+=======================
+Value Starting With A Digit
+=======================
+
+module M {
+  item A {
+    DisplayName = 9mm Magazine,
+    Weight = 9,
+  }
+}
+
+---
+
+(module (identifier)
+  (item (identifier)
+    (item_attribute (identifier) (item_attribute_text))
+    (item_attribute (identifier) (number))))
+
+=======================
+Comment Adjacent To A Value Is Absorbed
+=======================
+
+module M {
+  item A {
+    K = /* note */ V,
+    J = W /* note */,
+  }
+}
+
+---
+
+(module (identifier)
+  (item (identifier)
+    (item_attribute (identifier) (item_attribute_text))
+    (item_attribute (identifier) (item_attribute_text))))

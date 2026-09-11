@@ -13,7 +13,8 @@ rules carry a `TODO` naming what they don't handle yet.
 
 ```sh
 npm test                            # runs `tree-sitter test` — the corpus suite
-npx tree-sitter test -f "Basic Recipe"   # run one test, matched by its corpus name
+npx tree-sitter test -i "Basic Recipe"   # run tests whose name matches a regex (-e excludes)
+npx tree-sitter test --file-name item_attribute_values.txt  # run one corpus file
 npx tree-sitter test -u             # rewrite corpus expectations from actual output
 npx tree-sitter generate            # regenerate src/ from grammar.js
 npx tree-sitter parse <file>        # dump a parse tree; exits nonzero if it contains ERROR
@@ -111,9 +112,23 @@ These are all verified against the current parser, and most correspond to a
 - **`identifier` is `/[a-zA-Z][a-zA-Z0-9]*/`** — no dots or underscores. Real
   script files are full of dotted names like `Base.WineEmpty`, which currently
   fail to parse.
-- **`item_attribute_value` is `/\w+/`** — anything that isn't one bare word
-  fails, which covers both spaces (`DisplayName = Black Pepper,`) and decimals
-  (`MaxRange = 1.5,`). The decimal case is the one that bites on real files.
+- **An item attribute value runs to the terminating comma.**
+  `item_attribute_text` is `/[^,\n]*[^,\n\s]/` rather than a character
+  allowlist, because real values contain spaces, dots, hyphens, underscores,
+  semicolons and parentheses. A survey of a real `items.txt` found no value
+  containing a comma and no assignment lacking one, so the comma is a safe
+  terminator.
+- **Never put `token(prec(...))` on `number` or `boolean`.** Explicit token
+  precedence outranks longest-match in tree-sitter, so raising them above
+  `item_attribute_text` lexes `DisplayName = 9mm Magazine` as the number `9`
+  followed by an error, and `TRUEish` as the boolean `TRUE` followed by an
+  error. Both are real-looking values. Longest-match already does the right
+  thing, and an exact tie (`1.5`, `TRUE`) goes to `number`/`boolean` because
+  they appear earlier in the grammar — that ordering is load-bearing.
+- **A comment touching an item attribute value is swallowed into it.** Both
+  `K = /* c */ V,` and `K = V /* c */,` yield one `item_attribute_text` covering
+  the comment, with no `comment` node. That is inherent to a run-to-comma value
+  and is asserted by a corpus case. Comments on their own lines are unaffected.
 - **`name` is wrapped in `token(...)`** so a multi-word recipe label like
   `Close Umbrella` lexes as one token rather than colliding with `extras`
   whitespace. Leading/trailing space handling is a known TODO.
