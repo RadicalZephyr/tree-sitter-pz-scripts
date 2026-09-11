@@ -95,6 +95,27 @@ failure behavior shows up as a test failure rather than passing unnoticed.
 The workflow here is test-first: add the corpus case, watch it fail, then
 extend the grammar.
 
+### Real script files
+
+To get a corpus of real scripts to test against, `tools/fetch-pz-scripts.sh`
+pulls the shipped `media/scripts/` out of the Project Zomboid dedicated server.
+The server is a Steam Tool app that anonymous SteamCMD is entitled to, so this
+needs no Steam account and no copy of the game:
+
+```sh
+./tools/fetch-pz-scripts.sh          # Build 42, the current stable build
+./tools/fetch-pz-scripts.sh b41      # Build 41.78.21, frozen on the legacy41 branch
+./tools/fetch-pz-scripts.sh both
+```
+
+Scripts land in `tmp/pz-scripts/<build>/`, which is gitignored — they are The
+Indie Stone's game data. Use them to find syntax the grammar mishandles and to
+write reduced corpus cases; don't commit them.
+
+Which builds the grammar aims to cover, and why there is one grammar rather than
+one per build, is recorded in
+[docs/adr/0001-single-grammar-across-game-builds.md](docs/adr/0001-single-grammar-across-game-builds.md).
+
 ### Bindings
 
 Node and Rust bindings both build. The Node binding uses `node-addon-api`, and
