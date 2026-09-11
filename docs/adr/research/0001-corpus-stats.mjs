@@ -6,7 +6,7 @@
  * Consequences claim that the bulk of the outstanding work is shared between
  * builds rather than specific to either.
  *
- *   node docs/adr/research/corpus-stats.mjs
+ *   node docs/adr/research/0001-corpus-stats.mjs
  */
 
 import { BUILDS, loadBuild, n, stripComments } from './lib.mjs';

@@ -12,7 +12,7 @@
  * non-nesting reading are called out separately: the figure quoted in the ADR is
  * the one that holds either way.
  *
- *   node docs/adr/research/recipe-blank-line.mjs
+ *   node docs/adr/research/0001-recipe-blank-line.mjs
  */
 
 import { liveMask, lineOf, loadBuild, n } from './lib.mjs';

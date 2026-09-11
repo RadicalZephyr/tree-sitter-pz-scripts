@@ -5,7 +5,7 @@
  * rather than by conflicting syntax: a keyword removed in B42 never appears in a
  * B42 file, so a grammar carrying rules for both has nothing to disambiguate.
  *
- *   node docs/adr/research/block-keywords.mjs [--top N]
+ *   node docs/adr/research/0001-block-keywords.mjs [--top N]
  */
 
 import { BUILDS, blockKeywords, histogram, loadBuild, n } from './lib.mjs';

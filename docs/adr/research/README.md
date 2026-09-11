@@ -15,14 +15,19 @@ gitignored. Populate it first:
 Then, from the repository root:
 
 ```sh
-node docs/adr/research/corpus-stats.mjs       # sizes, separators, the lexical gaps
-node docs/adr/research/block-keywords.mjs     # block kinds per build, and the set difference
-node docs/adr/research/recipe-blank-line.mjs  # is the blank line in a recipe required?
+node docs/adr/research/0001-corpus-stats.mjs       # sizes, separators, the lexical gaps
+node docs/adr/research/0001-block-keywords.mjs     # block kinds per build, and the set difference
+node docs/adr/research/0001-recipe-blank-line.mjs  # is the blank line in a recipe required?
 ```
 
 Plain Node, no dependencies — the repo already requires Node for the tree-sitter
-CLI, so these add no toolchain. `lib.mjs` holds the shared corpus loading,
-comment stripping and block scanning.
+CLI, so these add no toolchain.
+
+Each runnable script is prefixed with the number of the ADR it backs, so it is
+obvious which decision a given analysis was gathered for. `lib.mjs` carries no
+prefix on purpose: it is a shared module rather than an analysis, holding the
+corpus loading, comment stripping and block scanning that any ADR's scripts can
+use. Split it per ADR only if two of them ever need incompatible helpers.
 
 ## Things worth knowing before trusting a number
 
@@ -35,8 +40,8 @@ newlines, so per-line regexes and line numbers both still work.
 **Comment nesting is unsettled**, so `liveMask` takes it as a parameter instead
 of guessing. `recipes.txt` contains a `/*` block holding a nested `/* … */`,
 and the two readings disagree about whether one `recipe` is live.
-`recipe-blank-line.mjs` reports both and quotes the figure that holds either way;
-prefer that habit to picking a reading.
+`0001-recipe-blank-line.mjs` reports both and quotes the figure that holds
+either way; prefer that habit to picking a reading.
 
 **Count lines per file, not over a concatenation.** Eleven B41 files have no
 trailing newline, so `cat *.txt | wc -l` silently merges each of those last lines
