@@ -139,23 +139,12 @@ not a base for B42, they are a sibling.
 
 ## Follow-ups this surfaced
 
-Neither depends on the decision above; both were found while gathering the
-evidence.
+Gathering the evidence turned up two defects that have nothing to do with the
+decision above. Both are tracked rather than described here:
 
-- **The blank line in a recipe is not load-bearing.** Five of the 381 live
-  shipped B41 recipes put attributes directly after requirements with no blank
-  line — `recipe Slice Onion` at `recipes.txt:3883` is the cleanest specimen. (A
-  sixth, `recipe HockeyMaskSmashBottle`, only counts if block comments do not
-  nest; see below. Five hold either way.) PZ
-  discriminates a requirement from an attribute by whether the line contains a
-  `:`, not by layout. `recipe_requirements`' `token.immediate('\n\n')` will emit
-  `ERROR` on real game content, and both `README.md` and `CLAUDE.md` currently
-  describe the blank line as required. Wants a corpus case and a rule change.
-- **Block comment nesting is undecided.** `media/scripts/recipes.txt` contains a
-  `/*` block holding a nested `/* ... */` and a commented-out `recipe`, with
-  balanced `/*` and `*/` counts across the file. Under C semantics the inner
-  `*/` closes the comment early and leaves a stray `*/`; under nesting semantics
-  the whole block is a comment. The scripts alone cannot settle which PZ does —
-  it needs the game's parser or an in-game experiment. Nesting requires an
-  external scanner, so this should be settled before the comment rule is
-  extended.
+- [#3](https://github.com/RadicalZephyr/tree-sitter-pz-scripts/issues/3) — the
+  blank line in a recipe is not load-bearing, so `recipe_requirements` rejects
+  real game content.
+- [#15](https://github.com/RadicalZephyr/tree-sitter-pz-scripts/issues/15) —
+  whether PZ's block comments nest is undecided, and the answer needs an external
+  scanner if they do.

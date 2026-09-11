@@ -56,10 +56,10 @@ export function loadBuild(build) {
 /**
  * Per-character "is this outside a comment" mask.
  *
- * Whether PZ's block comments nest is an open question — see ADR 0001's
- * follow-ups — so this takes it as a parameter rather than guessing. With
- * nested: false a `/*` runs to the first `*\/` (C semantics); with nested: true
- * openers are counted and the comment ends when the depth returns to zero.
+ * Whether PZ's block comments nest is an open question — see issue #15 — so this
+ * takes it as a parameter rather than guessing. With nested: false a `/*` runs to
+ * the first `*\/` (C semantics); with nested: true openers are counted and the
+ * comment ends when the depth returns to zero.
  *
  * @param {string} text
  * @param {{ nested?: boolean }} [options]

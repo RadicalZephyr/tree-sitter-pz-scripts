@@ -5,7 +5,7 @@
  * grammar.js terminates `recipe_requirements` with token.immediate('\n\n'), and
  * both README.md and CLAUDE.md describe that blank line as load-bearing. This
  * counts the shipped B41 recipes that omit it — each one is content the current
- * parser reports as an ERROR. Backs ADR 0001's first follow-up.
+ * parser reports as an ERROR. Backs issue #3.
  *
  * The count depends on whether PZ's block comments nest, which is itself
  * unsettled, so both readings are reported. Recipes that only appear under the
