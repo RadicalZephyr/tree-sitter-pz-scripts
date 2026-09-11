@@ -60,11 +60,13 @@ jobs:
       # One platform failing shouldn't hide whether the others are fine.
       fail-fast: false
       matrix:
-        # windows-latest is included alongside windows-2022 to find out whether
-        # the move to node-addon-api cleared the Visual Studio 2026 detection
-        # failure that forced the pin (nodejs/node-gyp#3282). Drop whichever
-        # proves redundant.
-        os: [ubuntu-latest, macos-latest, windows-2022, windows-latest]
+        # windows-2022 rather than windows-latest. Tested on this branch: moving
+        # to node-addon-api did NOT clear the Visual Studio 2026 detection
+        # failure, because node-addon-api still builds through node-gyp, and the
+        # node-gyp npm bundles (11.5.0) cannot detect VS 18
+        # (nodejs/node-gyp#3282). Un-pinning needs a newer node-gyp or prebuilt
+        # binaries, not a different binding library.
+        os: [ubuntu-latest, macos-latest, windows-2022]
     steps:
       - uses: actions/checkout@v4
 

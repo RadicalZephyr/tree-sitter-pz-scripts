@@ -9,7 +9,13 @@ const binding = typeof process.versions.bun === "string"
   : (await import("node-gyp-build")).default(root);
 
 try {
-  const nodeTypes = await import(`${root}/src/node-types.json`, { with: { type: "json" } });
+  // Deviates from `tree-sitter init` output on purpose. The generated form is
+  // `await import(`${root}/src/node-types.json`)`, but `root` is a filesystem
+  // path, and on Windows that is `D:\...`, which is not a valid ES module
+  // specifier. The import throws, the empty catch below swallows it, and
+  // nodeTypeInfo silently ends up undefined. Resolving against import.meta.url
+  // yields a file: URL on every platform. Re-apply this after `init --update`.
+  const nodeTypes = await import(new URL("../../src/node-types.json", import.meta.url).href, { with: { type: "json" } });
   binding.nodeTypeInfo = nodeTypes.default;
 } catch { }
 
