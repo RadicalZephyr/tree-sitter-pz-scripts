@@ -53,10 +53,11 @@ unit: any change to `grammar.js` must be followed by `tree-sitter generate` and
 both committed together. `git status` after a bare `generate` should be clean;
 if it isn't, the committed parser had drifted.
 
-`bindings/node`, `bindings/rust`, `binding.gyp`, and `Cargo.toml` are
-unmodified `tree-sitter init` boilerplate. There's no reason to touch them
-unless adding an external scanner or query files — both have commented-out
-blocks ready for that.
+`bindings/node`, `bindings/rust`, and `binding.gyp` are unmodified
+`tree-sitter init` boilerplate; `Cargo.toml` is too apart from its `license` and
+`repository` fields, which were corrected to match `package.json` (ISC). There's
+no reason to touch these unless adding an external scanner or query files — both
+have commented-out blocks ready for that.
 
 ## Grammar shape
 
@@ -106,9 +107,6 @@ a behavior untested.
 The git history is test-first — add the corpus case, watch it fail, then extend
 `grammar.js`. Follow that order.
 
-`example-file` at the repo root is a leftover scratch file containing `hello`.
-It is not a fixture and does not parse.
-
 ## Conventions
 
 Commit messages are imperative and sentence-case, with no prefixes or scopes:
@@ -118,10 +116,3 @@ Commit messages are imperative and sentence-case, with no prefixes or scopes:
 `grammar.js` keeps its `separated_list`/`separated_list1`/`separated_list2`
 helpers at the bottom with JSDoc types, and uses `////`-banner comments to
 separate definition types.
-
-## Packaging note
-
-`package.json` declares ISC and points at `RadicalZephyr/tree-sitter-pz-scripts`;
-`Cargo.toml` still carries the `tree-sitter init` defaults — MIT, and a
-`repository` URL under the `tree-sitter` org. The crate metadata is stale rather
-than intentional. Confirm with the author before publishing either package.
