@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  grammar:
+    name: Grammar
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      # `npm ci` installs exactly what package-lock.json pins. The drift check
+      # below compares a generated artifact against a committed one, so the
+      # generator's version has to be fixed for the comparison to mean anything.
+      - run: npm ci
+
+      - name: Corpus tests
+        run: npm test
+
+      # `tree-sitter test` regenerates src/ as a side effect, so a dirty tree
+      # here means the committed parser had drifted from grammar.js. The
+      # explicit generate keeps the check honest if that ever stops being true.
+      - name: Check src/ is in sync with grammar.js
+        run: |
+          npx tree-sitter generate
+          # Scoped to src/ deliberately: an unrelated stray file in the tree
+          # must not fail this step with a message blaming the parser.
+          if [ -n "$(git status --porcelain -- src/)" ]; then
+            echo "::error::src/ is out of date with grammar.js. Run 'npx tree-sitter generate' and commit the result."
+            git status --porcelain -- src/
+            git --no-pager diff -- src/
+            exit 1
+          fi
+
+  bindings:
+    name: Bindings (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # One platform failing shouldn't hide whether the others are fine.
+      fail-fast: false
+      matrix:
+        # windows-2022 rather than windows-latest: the latter now ships Visual
+        # Studio 2026, and the node-gyp npm bundles cannot detect it
+        # (nodejs/node-gyp#3282), so the native addon fails to configure.
+        # Revisit when npm ships a node-gyp >= 12, or when this repo moves off
+        # nan to node-addon-api.
+        os: [ubuntu-latest, macos-latest, windows-2022]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      # Rust ships in the runner images, but pinning the channel here means the
+      # job doesn't quietly change behaviour when an image is rebuilt.
+      - uses: dtolnay/rust-toolchain@stable
+
+      # Rust first: it compiles the generated parser.c through the cc crate, so
+      # it is the real "does this parser build here" signal. Running it ahead of
+      # the addon means a node-gyp toolchain problem can't mask that result.
+      # --locked is the cargo counterpart of `npm ci`: it fails rather than
+      # silently updating Cargo.lock, so CI builds what the lockfile pins.
+      - name: Rust binding
+        run: cargo test --locked
+
+      # binding.gyp makes npm build the native addon as part of install, so
+      # this compiles the generated parser.c on each platform.
+      - name: Build Node binding
+        run: npm ci
+
+      - name: Load Node binding
+        run: node -e "require('./bindings/node')"
