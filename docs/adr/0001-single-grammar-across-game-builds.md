@@ -21,17 +21,22 @@ parsers or one — and if two, how they are laid out and published.
 
 Both builds ship in the same Steam app (`380870`, "Project Zomboid Dedicated
 Server"), which is anonymously downloadable: B42 on the `public` branch and B41
-on `legacy41`. `tools/fetch-pz-scripts.sh` pulls either. The numbers below come
-from the shipped `media/scripts/` of both — 1004 files and 264k lines for B42,
-153 files and 89k lines for B41.
+on `legacy41`. `tools/fetch-pz-scripts.sh` pulls either.
+
+Every number below comes from the shipped `media/scripts/` of both builds —
+264,029 lines across 1004 files for B42, 89,429 across 153 for B41 — and is
+reproduced by the scripts in `docs/adr/research/`. Run them against a populated
+`tmp/pz-scripts/` rather than trusting this table; see that directory's README.
+Counts are taken after stripping comments, so commented-out definitions are not
+mistaken for shipped content.
 
 | Axis | B41 | B42 |
 | --- | --- | --- |
 | Block keywords removed in B42 | `recipe`, `uniquerecipe`, `multistagebuild`, `install`, `uninstall` | — |
-| Block keywords added in B42 | — | `craftRecipe`, `entity`, `fluid`, `timedAction`, `component`, `itemMapper`, `xuiSkin`, and ~90 more |
+| Block keywords added in B42 | — | 97, among them `craftRecipe`, `entity`, `fluid`, `timedAction`, `component`, `itemMapper`, `xuiSkin` |
 | Shared block keywords | 35 | 35 |
-| `key : value,` attributes | 2,835 | 1 |
-| `key = value,` attributes | 46,139 | 135,802 |
+| `key : value,` attributes | 2,800 | 0 |
+| `key = value,` attributes | 46,120 | 135,772 |
 | `recipe` blocks (live; 386 counting commented-out ones) | 381 | 0 |
 
 The divergence is of two kinds, and both are **disjoint** rather than
@@ -41,8 +46,8 @@ conflicting:
   uses explicit nested `inputs { }` / `outputs { }` blocks. These are different
   tokens; a file only ever uses one set.
 - **A normalized separator.** B42 moved the shared `evolvedrecipe` and `fixing`
-  blocks from `:` to `=`. Again different tokens, and `:` is effectively extinct
-  in B42.
+  blocks from `:` to `=`. Again different tokens, and outside comments `:` does
+  not appear as an attribute separator anywhere in B42 at all.
 
 What matters is what is *absent*: there is no construct where the same text
 should produce a different tree depending on the build. That absence is the
@@ -79,10 +84,12 @@ they are additive, and adding one is not a breaking change.
 **Good:**
 
 - One `parser.c`, one crate, one npm package, one corpus, one CI drift check.
-- The work actually in front of us is shared. Of the real script lines the
-  grammar rejects today, ~136k are attribute values containing spaces and ~11k
-  are dotted identifiers like `Base.Plank` — byte-identical problems in both
-  builds. Splitting first would mean fixing them twice, or building the sharing
+- The work actually in front of us is shared, and it is lexical. `item_attribute_value`
+  is `/\w+/` today, which rejects **91,640** of the corpus's attribute values —
+  19,352 in B41 and 72,288 in B42. Of those, 20,108 contain a space and 11,867
+  are dotted identifiers like `Base.Plank`; the rest carry separators such as
+  `;`, brackets, or signs. Every one of these is byte-identical in both builds,
+  so splitting first would mean fixing them twice, or building the sharing
   machinery before fixing anything.
 - Build detection falls out for free: which build a file targets can be
   inferred from which node types appear. Script files carry no build marker, so
