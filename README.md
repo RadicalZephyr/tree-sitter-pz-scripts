@@ -33,7 +33,9 @@ module Umbrella {
 
 - `module` blocks with an optional `imports` list, holding any number of
   definitions
-- `item` definitions with `key = value,` attributes
+- `item` definitions with `key = value,` attributes, where a value may be a
+  number (including negative and decimal), a boolean, or free text running to
+  the comma
 - `recipe` definitions with multi-word labels, ingredient requirements, and
   `key:value,` attributes
 - slash-alternate requirements — `WineEmpty/WineEmpty2,`
@@ -46,11 +48,9 @@ separator is currently required; without it the recipe won't parse.
 
 - **Dotted identifiers** like `Base.WineEmpty`, which real script files use
   everywhere. This is now the biggest gap.
-- **Item attribute values that aren't a single bare word.** `item_attribute_value`
-  is `/\w+/`, so both `DisplayName = Black Pepper,` and `MaxRange = 1.5,` fail.
-  Decimals are common enough in real items to make this a blocker in practice.
-- Requirement forms beyond the simple and slash-alternate cases, and attribute
-  value types beyond numbers and bare identifiers.
+- Recipe requirement forms beyond the simple and slash-alternate cases, and
+  recipe attribute values beyond numbers and bare identifiers. (Item attribute
+  values are handled; recipes still have the narrow rule.)
 - Syntax highlighting, indentation, and tagging queries — there is no
   `queries/` directory yet.
 
